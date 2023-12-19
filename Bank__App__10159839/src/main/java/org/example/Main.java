@@ -5,8 +5,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class Main implements Runnable {
+
+    static {
+        LogManager lgmngr = LogManager.getLogManager();
+        Logger log = lgmngr.getLogger(Logger.GLOBAL_LOGGER_NAME);
+        log.log(Level.INFO, "This is a log message for Config Level");
+    }
+
+    private final Logger LOGGER = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 
     BufferedReader buff;
     InputStreamReader isr;
@@ -31,57 +42,65 @@ public class Main implements Runnable {
 
         while (true) {
 
-            System.out.println("Welcome to IBS\nPlease select your bank\n1. ICICI\n2. HDFC\n3. SBI\n4. AXIS\n5. IDFC");
+            LOGGER.info("Welcome to IBS\nPlease select your bank\n1. ICICI\n2. HDFC\n3. SBI\n4. AXIS\n5. IDFC");
 
             try {
                 obj.selectedBank = Integer.parseInt(obj.buff.readLine());
             } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error reading selected bank", e);
                 e.printStackTrace();
             }
-            System.out.println("Customer Selected " + obj.selectedBank);
+            LOGGER.info("Customer Selected " + obj.selectedBank);
 
 
             Customer cus1 = new Customer();
-            System.out.println("Enter your Name: ");
+            LOGGER.info("Enter your Name: ");
             try {
                 cus1.customerName = obj.buff.readLine();
             } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error reading customer name", e);
                 throw new RuntimeException(e);
             }
-            System.out.println("Enter your Email: ");
+            LOGGER.info("Enter your Email: ");
             try {
                 cus1.customerEmail = obj.buff.readLine();
             } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error reading customer email", e);
                 throw new RuntimeException(e);
             }
-            System.out.println("Enter your Address: ");
+            LOGGER.info("Enter your Address: ");
             try {
                 cus1.customerAddress = obj.buff.readLine();
             } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error reading customer address", e);
                 throw new RuntimeException(e);
             }
-            System.out.println("Enter your Gender: ");
+            LOGGER.info("Enter your Gender: ");
             try {
                 cus1.customerGender = obj.buff.readLine();
             } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error reading customer gender", e);
                 throw new RuntimeException(e);
             }
-            System.out.println("Enter your Aadhar: ");
+            LOGGER.info("Enter your Aadhar: ");
             try {
                 cus1.customerAadhar = obj.buff.readLine();
             } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error reading customer Aadhar", e);
                 throw new RuntimeException(e);
             }
-            System.out.println("Enter your Phone Number: ");
+            LOGGER.info("Enter your Phone Number: ");
             try {
                 cus1.customerPhone = obj.buff.readLine();
             } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error reading customer phone number", e);
                 throw new RuntimeException(e);
             }
-            System.out.println("Enter your Balance: ");
+            LOGGER.info("Enter your Balance: ");
             try {
                 cus1.balance = Float.parseFloat(obj.buff.readLine());
             } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error reading customer balance", e);
                 throw new RuntimeException(e);
             }
 
@@ -125,73 +144,79 @@ public class Main implements Runnable {
 
             while (true) {
 
-                System.out.println("Select your choice\n1. Deposit\n2. Withdrawl\n3. OpenFD\n4. Apply Loan\n5. Apply CC");
+                LOGGER.info("Select your choice\n1. Deposit\n2. Withdrawal\n3. OpenFD\n4. Apply Loan\n5. Apply CC");
 
                 try {
                     obj.selectedOperation = Integer.parseInt(obj.buff.readLine());
                 } catch (IOException e) {
+                    LOGGER.log(Level.SEVERE, "Error reading selected operation", e);
                     e.printStackTrace();
                 }
-                System.out.println("Customer Selected " + obj.selectedOperation);
+                LOGGER.info("Customer Selected " + obj.selectedOperation);
 
                 if (obj.selectedOperation == 1) {
 
-                    System.out.println("How much money to deposit: ");
+                    LOGGER.info("How much money to deposit: ");
                     try {
                         float balanceToDeposit = Float.parseFloat(obj.buff.readLine());
                         cus1.balance += bank.depositMoney(balanceToDeposit);
                     } catch (IOException e) {
+                        LOGGER.log(Level.SEVERE, "Error depositing money", e);
                         e.printStackTrace();
                     }
 
-                    System.out.println("Now your balance is " + cus1.balance);
+                    LOGGER.info("Now your balance is " + cus1.balance);
                 } else if (obj.selectedOperation == 2) {
-                    System.out.println("How much money to withdraw: ");
+                    LOGGER.info("How much money to withdraw: ");
                     try {
                         float balanceToWithdraw = Float.parseFloat(obj.buff.readLine());
                         cus1.balance -= bank.withdrawMoney(balanceToWithdraw, cus1.balance);
                     } catch (IOException e) {
+                        LOGGER.log(Level.SEVERE, "Error withdrawing money", e);
                         e.printStackTrace();
                     }
-                    System.out.println("Your updated balance is " + cus1.balance);
+                    LOGGER.info("Your updated balance is " + cus1.balance);
                 } else if (obj.selectedOperation == 3) {
 
                     try {
-                        System.out.println("How much money to fixed deposit: ");
+                        LOGGER.info("How much money to fixed deposit: ");
                         float amount = Float.parseFloat(obj.buff.readLine());
-                        System.out.println("Enter the Rate of Interest per year");
+                        LOGGER.info("Enter the Rate of Interest per year");
                         float roi = Float.parseFloat(obj.buff.readLine());
-                        System.out.println("Enter the number of years");
+                        LOGGER.info("Enter the number of years");
                         int years = Integer.parseInt(obj.buff.readLine());
                         bank.openFD(amount, roi, years);
 
                     } catch (IOException e) {
+                        LOGGER.log(Level.SEVERE, "Error opening FD", e);
                         e.printStackTrace();
                     }
 
                 } else if (obj.selectedOperation == 4) {
-                    System.out.println("What type of loan you need:\n1. Home\n2. Education\n3. Personal\n4. Car");
+                    LOGGER.info("What type of loan you need:\n1. Home\n2. Education\n3. Personal\n4. Car");
                     try {
                         int loan_type = Integer.parseInt(obj.buff.readLine());
-                        System.out.println("Customer Selected " + loan_type);
-                        System.out.println("Enter the loan amount you need: ");
+                        LOGGER.info("Customer Selected " + loan_type);
+                        LOGGER.info("Enter the loan amount you need: ");
                         float loan_amount = Float.parseFloat(obj.buff.readLine());
-                        System.out.println("Enter the number of years you want the loan: ");
+                        LOGGER.info("Enter the number of years you want the loan: ");
                         int year = Integer.parseInt(obj.buff.readLine());
                         bank.applyLoan(loan_type, loan_amount, year);
                     } catch (IOException e) {
+                        LOGGER.log(Level.SEVERE, "Error applying for a loan", e);
                         e.printStackTrace();
                     }
 
                 }
 
-                System.out.println("Do you want to continue: ");
-                System.out.println("Please select the operation:\n1. Yes\n2. No ");
+                LOGGER.info("Do you want to continue: ");
+                LOGGER.info("Please select the operation:\n1. Yes\n2. No ");
 
                 int selectChoice = 0;
                 try {
                     selectChoice = Integer.parseInt(obj.buff.readLine());
                 } catch (IOException e) {
+                    LOGGER.log(Level.SEVERE, "Error reading user choice", e);
                     e.printStackTrace();
                 }
 
@@ -216,11 +241,12 @@ public class Main implements Runnable {
                 obj.bankNumberOfCustomer.put(obj.selectedBank, accountNumbers);
             }
 
-            System.out.println("Enter the server response");
+            LOGGER.info("Enter the server response");
             int x=0;
             try {
                 x = Integer.parseInt(obj.buff.readLine());
             } catch (IOException e) {
+                LOGGER.log(Level.SEVERE, "Error reading server response", e);
                 e.printStackTrace();
             }
 
@@ -228,14 +254,15 @@ public class Main implements Runnable {
                 break;
         }
 
-        System.out.println("Please tell the Aadhar number to know the details: ");
-        System.out.println("Enter your Aadhar: ");
+        LOGGER.info("Please tell the Aadhar number to know the details: ");
+        LOGGER.info("Enter your Aadhar: ");
         try {
             String customerAadhar = obj.buff.readLine();
-            System.out.println("Number of accounts of a particular Customer: " + obj.customerAccount.get(customerAadhar).size());
-            System.out.println("Number of Customers of a particular bank: " + obj.bankNumberOfCustomer.get(obj.selectedBank).size());
+            LOGGER.info("Number of accounts of a particular Customer: " + obj.customerAccount.get(customerAadhar).size());
+            LOGGER.info("Number of Customers of a particular bank: " + obj.bankNumberOfCustomer.get(obj.selectedBank).size());
 
         } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Error reading Aadhar or retrieving customer details", e);
             throw new RuntimeException(e);
         }
     }
